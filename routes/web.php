@@ -26,5 +26,7 @@ Route::get('/hello', function (Request $request) {
 });
 
 Route::get('/hello/{name}', function ($name) {
-    return '<h1>Hello, '.$name.'</h1>';
+    return view("hello-name", [
+        "name" => $name,
+    ]);
 });
