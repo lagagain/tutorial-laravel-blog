@@ -16,7 +16,7 @@ class CreateBlogPostTable extends Migration
         Schema::create('blog_post', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->lineString("titile")->comment('標題');
+            $table->string("titile")->comment('標題');
             $table->longText("content")->comment('文章內容');
             //$table->string('author')->comment("作者");
         });
