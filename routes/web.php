@@ -42,5 +42,6 @@ Route::group(['prefix' => 'blog',
               'namespace' => 'Blog', ],
 
              function(){
-                  Route::get('/post/{post_id}', "ExamplePostController@show");
+                 // Route::get('/post/{post_id}', "ExamplePostController@show");
+                 Route::resource('/post',"PostController");
               });
