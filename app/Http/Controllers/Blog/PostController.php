@@ -15,9 +15,36 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $offset = $request->query("offset", 0);
+        $limit = $request->query("limit", 30);
+        $page = $request->query("page");
+
+        if($page){
+            $offset = ($page - 1) * $limit;
+        }else{
+            $page = ($offset / $limit) + 1;
+        }
+
+        $request->merge([
+            "offset" => $offset,
+            "page" => $page,
+        ]);
+
+        $posts = BlogPost::orderBy('id','ASC')
+                    ->offset($offset)
+                    ->limit($limit)
+                    ->get();
+
+        $post_cnt = BlogPost::all()->count();
+        $total_pages = ($limit + $post_cnt - 1) / $limit;
+
+        return view("blog/index",[
+            "posts"=>$posts,
+            "page"=>$page,
+            "total_pages" => $total_pages,
+        ]);
     }
 
     /**
@@ -27,7 +54,11 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('blog/edit',[
+            'title' => '未命名文章',
+            'content' => '',
+            'type' => 'create,'
+        ]);
     }
 
     /**
@@ -47,6 +78,10 @@ class PostController extends Controller
         $id = $post->save();
 
         Log::info("Store New Blog Post: id = $id");
+
+        return redirect()->action(
+            'Blog\PostController@show', ['id' => $id]
+        );
     }
 
     /**
@@ -70,7 +105,7 @@ class PostController extends Controller
         }
 
         return view("blog.post", [
-            "title" => $post->titile,
+            "title" => $post->title,
             "content" => $content,
         ]);
     }
@@ -83,7 +118,14 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = BlogPost::find($id);
+
+        return view('blog/edit',[
+            'id' => $id,
+            'title' => $post->title,
+            'content' => $post->content,
+            'type' => 'edit',
+        ]);
     }
 
     /**
@@ -101,18 +143,18 @@ class PostController extends Controller
             abort(403);
         }
 
-        $title = $request->input("titile", "未命名文章");
+        $title = $request->input("title", "未命名文章");
         $content = $request->input("content");
 
         $post->title = $title;
         $post->content = $content;
-
         $post->update();
+
 
         Log::info("Update Blog Post, the id is $id");
 
         return redirect()->action(
-            'PostController@show', ['id' => $id]
+            'Blog\PostController@show', ['id' => $id]
         );
     }
 
