@@ -17,33 +17,11 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $offset = $request->query("offset", 0);
-        $limit = $request->query("limit", 30);
-        $page = $request->query("page");
 
-        if($page){
-            $offset = ($page - 1) * $limit;
-        }else{
-            $page = ($offset / $limit) + 1;
-        }
-
-        $request->merge([
-            "offset" => $offset,
-            "page" => $page,
-        ]);
-
-        $posts = BlogPost::orderBy('id','ASC')
-                    ->offset($offset)
-                    ->limit($limit)
-                    ->get();
-
-        $post_cnt = BlogPost::all()->count();
-        $total_pages = ($limit + $post_cnt - 1) / $limit;
+        $posts = BlogPost::paginate(15);
 
         return view("blog/index",[
             "posts"=>$posts,
-            "page"=>$page,
-            "total_pages" => $total_pages,
         ]);
     }
 
