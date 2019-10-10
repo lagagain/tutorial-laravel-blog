@@ -14,9 +14,7 @@
         <input name="title" type="text" value="{{$title}}" id="title" />
         <br/>
         <label for="content">內容：</label>
-        <textarea cols="30" id="content" name="content" rows="10">
-{{$content}}
-        </textarea>
+        <textarea cols="30" id="content" name="content" rows="10">{{$content}}</textarea>
         <br/>
         <input name="" type="submit" value="儲存"/>
     </form>

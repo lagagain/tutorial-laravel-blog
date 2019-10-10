@@ -18,7 +18,8 @@ class PostController extends Controller
     public function index(Request $request)
     {
 
-        $posts = BlogPost::paginate(15);
+        $limit = $request->query('limit', 30);
+        $posts = BlogPost::paginate($limit);
 
         return view("blog/index",[
             "posts"=>$posts,
@@ -53,12 +54,12 @@ class PostController extends Controller
         $post = new BlogPost;
         $post->title = $title;
         $post->content = $content;
-        $id = $post->save();
+        $post->save();
 
-        Log::info("Store New Blog Post: id = $id");
+        Log::info("Store New Blog Post: id = $post->id");
 
         return redirect()->action(
-            'Blog\PostController@show', ['id' => $id]
+            'Blog\PostController@show', ['id' => $post->id]
         );
     }
 
@@ -154,6 +155,6 @@ class PostController extends Controller
 
         Log::info("Delete Blog Post, the id is $id");
 
-        return redirect()->action('PostController@index');
+        return redirect()->action('Blog\PostController@index');
     }
 }
