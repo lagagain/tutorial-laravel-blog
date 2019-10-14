@@ -4,7 +4,7 @@
 
 
 @section('body')
-    <h1>404錯誤 - 找不著頁面</h1>
+    <h1>{{__('error.404.error message')}}</h1>
     <b>哎呀，找不著頁面</b>
     <p>
         <ul>
