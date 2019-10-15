@@ -52,7 +52,9 @@ Route::get('/images/upload', function(){
 
 Route::post('/images/upload', function(Request $request){
 
-
+    Validator::make($request->all(), [
+        'file' => 'required|image',
+    ])->validate();
 
     if($request->hasFile('file')){
         $image = $request->file('file');
