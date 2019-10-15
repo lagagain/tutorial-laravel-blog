@@ -45,3 +45,19 @@ Route::group(['prefix' => 'blog',
                  // Route::get('/post/{post_id}', "ExamplePostController@show");
                  Route::resource('/post',"PostController");
               });
+
+Route::get('/images/upload', function(){
+    return view('images/upload');
+});
+
+Route::post('/images/upload', function(Request $request){
+
+
+
+    if($request->hasFile('file')){
+        $image = $request->file('file');
+        $file_path = $image->store('public');
+    }
+
+    return redirect(Storage::url($file_path));
+})->name('image.upload');
