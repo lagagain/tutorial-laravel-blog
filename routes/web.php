@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ImageUpload;
 
 Route::get('/', function () {
     return '<h1>Hello</h1>';
@@ -50,11 +51,7 @@ Route::get('/images/upload', function(){
     return view('images/upload');
 });
 
-Route::post('/images/upload', function(Request $request){
-
-    Validator::make($request->all(), [
-        'file' => 'required|image',
-    ])->validate();
+Route::post('/images/upload', function(ImageUpload $request){
 
     if($request->hasFile('file')){
         $image = $request->file('file');
