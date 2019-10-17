@@ -60,3 +60,7 @@ Route::post('/images/upload', function(ImageUpload $request){
 
     return redirect(Storage::url($file_path));
 })->name('image.upload');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
